@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STEB: Speech-to-Speech Translation Expressiveness Benchmark</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="hero">
+        <div class="container">
+            <h1 class="title"><span class="sc">STEB</span>: A Speech-to-Speech Translation Expressiveness Benchmark for Evaluating Beyond Translation Fidelity</h1>
+            <p class="authors">Anonymous Authors</p>
+            <div class="badges">
+                <a href="#" class="badge">Paper (Coming Soon)</a>
+                <a href="#" class="badge">Code (Coming Soon)</a>
+                <a href="#audio-demos" class="badge badge-primary">Audio Demos</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Abstract -->
+    <section class="section" id="abstract">
+        <div class="container">
+            <h2>Abstract</h2>
+            <p class="abstract-text">
+                Speech-to-speech translation (S2ST) should preserve not only lexical meaning, but also expressive attributes: emotion, scenario style, and nonverbal vocalizations (NVs). We introduce <span class="sc">STEB</span> (<b>S</b>peech-to-Speech <b>T</b>ranslation <b>E</b>xpressiveness <b>B</b>enchmark), a 32.6-hour Chinese&ndash;English benchmark that evaluates both standard dimensions (translation fidelity, speaker similarity, duration alignment) and expressiveness dimensions (emotion, scenario style, NV preservation). For expressiveness evaluation, <span class="sc">STEB</span> uses a caption-then-summarize framework that converts speech into structured expressive attributes and compares source and hypothesis attributes with an LLM judge. Human validation shows statistically significant correlations with listener judgments across all expressive dimensions. We evaluate six S2ST systems and find that current systems achieve strong translation fidelity but still struggle with emotion preservation (best: 3.82/5) and NV preservation (best: 2.31/5), identifying expressiveness preservation as an open challenge for S2ST.
+            </p>
+        </div>
+    </section>
+
+    <!-- Teaser Figure -->
+    <section class="section section-alt" id="overview">
+        <div class="container">
+            <h2>Overview</h2>
+            <figure class="figure-full">
+                <img src="static/teaser.png" alt="STEB Overview: (a) Benchmark annotation dimensions, (b) Automatic expressiveness judge pipeline, (c) Radar chart comparing S2ST systems">
+                <figcaption><b>Figure 1.</b> Overview of STEB. <b>(a)</b> Benchmark example showing annotation dimensions: transcription, translation, rich audio description, emotion, scenario style, and text with NVs. <b>(b)</b> The automatic expressiveness judge: a Captioner&ndash;Summary pipeline and NV detection extract hypothesis annotations, which an LLM Scorer compares against source annotations. <b>(c)</b> Radar chart comparing baseline systems across six dimensions.</figcaption>
+            </figure>
+        </div>
+    </section>
+
+    <!-- Highlights -->
+    <section class="section" id="highlights">
+        <div class="container">
+            <h2>Key Findings</h2>
+            <div class="highlights-grid">
+                <div class="highlight-card">
+                    <div class="highlight-icon">1</div>
+                    <h3>Translation &ne; Expressiveness</h3>
+                    <p>Most systems achieve strong translation fidelity, but expressiveness preservation lags far behind. Cascaded systems score 1.67&ndash;1.73 on emotion (out of 5), while end-to-end models reach up to 3.82.</p>
+                </div>
+                <div class="highlight-card">
+                    <div class="highlight-icon">2</div>
+                    <h3>NV Needs Explicit Modeling</h3>
+                    <p>Nonverbal vocalizations benefit from explicit text-level markers. Systems with NV detection reach 2.31/5, while end-to-end systems score no higher than 1.58/5.</p>
+                </div>
+                <div class="highlight-card">
+                    <div class="highlight-icon">3</div>
+                    <h3>Duration Requires Control</h3>
+                    <p>Only systems with dedicated duration control achieve strong alignment (SLC<sub>0.2</sub> = 0.98). All other systems remain below 0.66, critical for video dubbing.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contributions -->
+    <section class="section section-alt" id="contributions">
+        <div class="container">
+            <h2>Contributions</h2>
+            <ul class="contribution-list">
+                <li>
+                    <span class="contrib-marker"></span>
+                    We introduce <span class="sc">STEB</span>, a <b>32.6-hour Chinese&ndash;English</b> S2ST benchmark covering six real-world scenarios and expressive dimensions including emotion, scenario style, and NVs.
+                </li>
+                <li>
+                    <span class="contrib-marker"></span>
+                    We build a <b>scalable curation pipeline</b> that converts real-world audio into structured source annotations with automatic quality control and human validation.
+                </li>
+                <li>
+                    <span class="contrib-marker"></span>
+                    We propose a <b>reference-free LLM-as-a-judge framework</b> that scores emotion, scenario style, and NV preservation, showing significant correlation with human judgments.
+                </li>
+                <li>
+                    <span class="contrib-marker"></span>
+                    We evaluate <b>six S2ST systems</b> on <span class="sc">STEB</span> and reveal that current systems achieve strong translation fidelity but still struggle to preserve emotion and NVs.
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Method Figure -->
+    <section class="section" id="method">
+        <div class="container">
+            <h2>Data Curation Pipeline</h2>
+            <figure class="figure-full">
+                <img src="static/method.png" alt="STEB data curation pipeline showing data collection, preprocessing, quality filtering, ASR/translation, expressive annotation, and quality check stages">
+                <figcaption><b>Figure 2.</b> Data curation pipeline of STEB. The pipeline processes raw web audio through six stages: data collection from diverse scenarios, preprocessing with speaker segmentation, speech quality filtering, ASR and translation, expressive annotation extraction, and annotation quality verification.</figcaption>
+            </figure>
+        </div>
+    </section>
+
+    <!-- Audio Demos -->
+    <section class="section section-alt" id="audio-demos">
+        <div class="container">
+            <h2>Audio Demos</h2>
+            <p class="demo-description">Below are audio samples comparing source speech and translated outputs from different S2ST systems evaluated on <span class="sc">STEB</span>.</p>
+
+            <div class="demo-placeholder">
+                <p>Audio demos will be available soon.</p>
+            </div>
+
+            <!--
+            Template for audio demo rows:
+
+            <div class="demo-group">
+                <h3 class="demo-scenario">Scenario: Drama</h3>
+                <p class="demo-meta">Emotion: Angry | Style: Dramatic dialogue | NV: [Laughter]</p>
+                <table class="demo-table">
+                    <thead>
+                        <tr>
+                            <th>System</th>
+                            <th>Audio</th>
+                            <th>Transcript</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Source (ZH)</td>
+                            <td><audio controls><source src="" type="audio/wav"></audio></td>
+                            <td class="transcript">...</td>
+                        </tr>
+                        <tr>
+                            <td>Three-Stage</td>
+                            <td><audio controls><source src="" type="audio/wav"></audio></td>
+                            <td class="transcript">...</td>
+                        </tr>
+                        <tr>
+                            <td>Two-Stage</td>
+                            <td><audio controls><source src="" type="audio/wav"></audio></td>
+                            <td class="transcript">...</td>
+                        </tr>
+                        <tr>
+                            <td>UniSS</td>
+                            <td><audio controls><source src="" type="audio/wav"></audio></td>
+                            <td class="transcript">...</td>
+                        </tr>
+                        <tr>
+                            <td>SeamlessExpressive</td>
+                            <td><audio controls><source src="" type="audio/wav"></audio></td>
+                            <td class="transcript">...</td>
+                        </tr>
+                        <tr>
+                            <td>Seed Live 2.0</td>
+                            <td><audio controls><source src="" type="audio/wav"></audio></td>
+                            <td class="transcript">...</td>
+                        </tr>
+                        <tr>
+                            <td>Step-Audio 2</td>
+                            <td><audio controls><source src="" type="audio/wav"></audio></td>
+                            <td class="transcript">...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            -->
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>Anonymous Submission &mdash; Under Review</p>
+        </div>
+    </footer>
+</body>
+</html>
