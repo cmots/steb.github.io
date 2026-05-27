@@ -1,0 +1,434 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - 'heading "STEB: A Speech-to-Speech Translation Expressiveness Benchmark for Evaluating Beyond Translation Fidelity" [level=1] [ref=e4]'
+      - paragraph [ref=e5]: Anonymous Authors
+      - generic [ref=e6]:
+        - link "Paper (Coming Soon)" [ref=e7] [cursor=pointer]:
+          - /url: "#"
+        - link "Code (Coming Soon)" [ref=e8] [cursor=pointer]:
+          - /url: "#"
+        - link "Audio Demos" [ref=e9] [cursor=pointer]:
+          - /url: "#audio-demos"
+  - generic [ref=e11]:
+    - heading "Abstract" [level=2] [ref=e12]
+    - paragraph [ref=e13]: "Speech-to-speech translation (S2ST) should preserve not only lexical meaning, but also expressive attributes: emotion, scenario style, and nonverbal vocalizations (NVs). We introduce STEB (Speech-to-Speech Translation Expressiveness Benchmark), a 32.6-hour Chinese–English benchmark that evaluates both standard dimensions (translation fidelity, speaker similarity, duration alignment) and expressiveness dimensions (emotion, scenario style, NV preservation). For expressiveness evaluation, STEB uses a caption-then-summarize framework that converts speech into structured expressive attributes and compares source and hypothesis attributes with an LLM judge. Human validation shows statistically significant correlations with listener judgments across all expressive dimensions. We evaluate six S2ST systems and find that current systems achieve strong translation fidelity but still struggle with emotion preservation (best: 3.82/5) and NV preservation (best: 2.31/5), identifying expressiveness preservation as an open challenge for S2ST."
+  - generic [ref=e15]:
+    - heading "Overview" [level=2] [ref=e16]
+    - 'figure "Figure 1. Overview of STEB. (a) Benchmark example showing annotation dimensions: transcription, translation, rich audio description, emotion, scenario style, and text with NVs. (b) The automatic expressiveness judge: a Captioner–Summary pipeline and NV detection extract hypothesis annotations, which an LLM Scorer compares against source annotations. (c) Radar chart comparing baseline systems across six dimensions." [ref=e17]':
+      - 'img "STEB Overview: (a) Benchmark annotation dimensions, (b) Automatic expressiveness judge pipeline, (c) Radar chart comparing S2ST systems" [ref=e18]'
+      - generic [ref=e19]: "Figure 1. Overview of STEB. (a) Benchmark example showing annotation dimensions: transcription, translation, rich audio description, emotion, scenario style, and text with NVs. (b) The automatic expressiveness judge: a Captioner–Summary pipeline and NV detection extract hypothesis annotations, which an LLM Scorer compares against source annotations. (c) Radar chart comparing baseline systems across six dimensions."
+  - generic [ref=e21]:
+    - heading "Key Findings" [level=2] [ref=e22]
+    - generic [ref=e23]:
+      - generic [ref=e24]:
+        - generic [ref=e25]: "1"
+        - heading "Translation ≠ Expressiveness" [level=3] [ref=e26]
+        - paragraph [ref=e27]: Most systems achieve strong translation fidelity, but expressiveness preservation lags far behind. Cascaded systems score 1.67–1.73 on emotion (out of 5), while end-to-end models reach up to 3.82.
+      - generic [ref=e28]:
+        - generic [ref=e29]: "2"
+        - heading "NV Needs Explicit Modeling" [level=3] [ref=e30]
+        - paragraph [ref=e31]: Nonverbal vocalizations benefit from explicit text-level markers. Systems with NV detection reach 2.31/5, while end-to-end systems score no higher than 1.58/5.
+      - generic [ref=e32]:
+        - generic [ref=e33]: "3"
+        - heading "Duration Requires Control" [level=3] [ref=e34]
+        - paragraph [ref=e35]:
+          - text: Only systems with dedicated duration control achieve strong alignment (SLC
+          - subscript [ref=e36]: "0.2"
+          - text: = 0.98). All other systems remain below 0.66, critical for video dubbing.
+  - generic [ref=e38]:
+    - heading "Contributions" [level=2] [ref=e39]
+    - list [ref=e40]:
+      - listitem [ref=e41]: We introduce STEB, a 32.6-hour Chinese–English S2ST benchmark covering six real-world scenarios and expressive dimensions including emotion, scenario style, and NVs.
+      - listitem [ref=e42]: We build a scalable curation pipeline that converts real-world audio into structured source annotations with automatic quality control and human validation.
+      - listitem [ref=e43]: We propose a reference-free LLM-as-a-judge framework that scores emotion, scenario style, and NV preservation, showing significant correlation with human judgments.
+      - listitem [ref=e44]: We evaluate six S2ST systems on STEB and reveal that current systems achieve strong translation fidelity but still struggle to preserve emotion and NVs.
+  - generic [ref=e46]:
+    - heading "Data Curation Pipeline" [level=2] [ref=e47]
+    - 'figure "Figure 2. Data curation pipeline of STEB. The pipeline processes raw web audio through six stages: data collection from diverse scenarios, preprocessing with speaker segmentation, speech quality filtering, ASR and translation, expressive annotation extraction, and annotation quality verification." [ref=e48]':
+      - img "STEB data curation pipeline showing data collection, preprocessing, quality filtering, ASR/translation, expressive annotation, and quality check stages" [ref=e49]
+      - generic [ref=e50]: "Figure 2. Data curation pipeline of STEB. The pipeline processes raw web audio through six stages: data collection from diverse scenarios, preprocessing with speaker segmentation, speech quality filtering, ASR and translation, expressive annotation extraction, and annotation quality verification."
+  - generic [ref=e52]:
+    - heading "Audio Demos" [level=2] [ref=e53]
+    - paragraph [ref=e54]: Below are audio samples comparing source speech and translated outputs from different S2ST systems evaluated on STEB.
+    - generic [ref=e55]:
+      - heading "Benchmark Source Audio" [level=3] [ref=e56]
+      - paragraph [ref=e57]: Source samples from the benchmark with human-readable expressive annotations.
+      - generic [ref=e58]:
+        - 'heading "Normal Source Samples: ZH" [level=3] [ref=e59]'
+        - generic [ref=e60]:
+          - article [ref=e61]:
+            - 'heading "Normal ZH #1" [level=4] [ref=e62]'
+            - table [ref=e63]:
+              - rowgroup [ref=e64]:
+                - row "Source Audio" [ref=e65]:
+                  - rowheader "Source Audio" [ref=e66]
+                  - cell [ref=e67]
+                - row "Transcription 要有坚定的信念，矢志不移，最后也是最重要的就是凡事要讲求公正，有职，有权的人就更得如此。" [ref=e69]:
+                  - rowheader "Transcription" [ref=e70]
+                  - cell "要有坚定的信念，矢志不移，最后也是最重要的就是凡事要讲求公正，有职，有权的人就更得如此。" [ref=e71]
+                - row "Emotion The speaker is conveying a sense of calm, unwavering conviction." [ref=e72]:
+                  - rowheader "Emotion" [ref=e73]
+                  - cell "The speaker is conveying a sense of calm, unwavering conviction." [ref=e74]
+                - row "Scenario Style The speech is delivered in a formal, educational setting, resembling a public service announcement or institutional training module." [ref=e75]:
+                  - rowheader "Scenario Style" [ref=e76]
+                  - cell "The speech is delivered in a formal, educational setting, resembling a public service announcement or institutional training module." [ref=e77]
+                - row "Caption" [ref=e78]:
+                  - rowheader "Caption" [ref=e79]
+                  - cell [ref=e80]:
+                    - group [ref=e81]:
+                      - generic "Show caption" [ref=e82] [cursor=pointer]
+          - article [ref=e83]:
+            - 'heading "Normal ZH #2" [level=4] [ref=e84]'
+            - table [ref=e85]:
+              - rowgroup [ref=e86]:
+                - row "Source Audio" [ref=e87]:
+                  - rowheader "Source Audio" [ref=e88]
+                  - cell [ref=e89]
+                - row "Transcription 那我们前面呢也说了，就是说呃微生物的这个和细胞学的这个发展呢和产生呢都离不开一个重要的一个呃。" [ref=e91]:
+                  - rowheader "Transcription" [ref=e92]
+                  - cell "那我们前面呢也说了，就是说呃微生物的这个和细胞学的这个发展呢和产生呢都离不开一个重要的一个呃。" [ref=e93]
+                - row "Emotion The speaker is conveying a calm and composed demeanor, focused on clarity and precision." [ref=e94]:
+                  - rowheader "Emotion" [ref=e95]
+                  - cell "The speaker is conveying a calm and composed demeanor, focused on clarity and precision." [ref=e96]
+                - row "Scenario Style The speech is delivered in a formal academic lecture setting, typical of a university classroom or scholarly presentation." [ref=e97]:
+                  - rowheader "Scenario Style" [ref=e98]
+                  - cell "The speech is delivered in a formal academic lecture setting, typical of a university classroom or scholarly presentation." [ref=e99]
+                - row "Caption" [ref=e100]:
+                  - rowheader "Caption" [ref=e101]
+                  - cell [ref=e102]:
+                    - group [ref=e103]:
+                      - generic "Show caption" [ref=e104] [cursor=pointer]
+          - article [ref=e105]:
+            - 'heading "Normal ZH #3" [level=4] [ref=e106]'
+            - table [ref=e107]:
+              - rowgroup [ref=e108]:
+                - row "Source Audio" [ref=e109]:
+                  - rowheader "Source Audio" [ref=e110]
+                  - cell [ref=e111]
+                - row "Transcription 过故人庄在孟浩然的诗中虽不算是最淡的，但他用省静的语言平平的叙述也已经可以算是淡到看不见诗的程度了。" [ref=e113]:
+                  - rowheader "Transcription" [ref=e114]
+                  - cell "过故人庄在孟浩然的诗中虽不算是最淡的，但他用省静的语言平平的叙述也已经可以算是淡到看不见诗的程度了。" [ref=e115]
+                - row "Emotion The speaker is conveying a calm and thoughtful demeanor, reflecting deep engagement with the subject matter." [ref=e116]:
+                  - rowheader "Emotion" [ref=e117]
+                  - cell "The speaker is conveying a calm and thoughtful demeanor, reflecting deep engagement with the subject matter." [ref=e118]
+                - row "Scenario Style The speech is delivered in a formal educational broadcast style, resembling a scholarly commentary on classical Chinese poetry." [ref=e119]:
+                  - rowheader "Scenario Style" [ref=e120]
+                  - cell "The speech is delivered in a formal educational broadcast style, resembling a scholarly commentary on classical Chinese poetry." [ref=e121]
+                - row "Caption" [ref=e122]:
+                  - rowheader "Caption" [ref=e123]
+                  - cell [ref=e124]:
+                    - group [ref=e125]:
+                      - generic "Show caption" [ref=e126] [cursor=pointer]
+          - article [ref=e127]:
+            - 'heading "Normal ZH #4" [level=4] [ref=e128]'
+            - table [ref=e129]:
+              - rowgroup [ref=e130]:
+                - row "Source Audio" [ref=e131]:
+                  - rowheader "Source Audio" [ref=e132]
+                  - cell [ref=e133]
+                - row "Transcription 梅洛庞蒂和加达摩尔这两位虽然放在第三季讲解，但他们的理论也属于现象学运动的大范畴。梅洛庞蒂开创了知觉现象学。" [ref=e135]:
+                  - rowheader "Transcription" [ref=e136]
+                  - cell "梅洛庞蒂和加达摩尔这两位虽然放在第三季讲解，但他们的理论也属于现象学运动的大范畴。梅洛庞蒂开创了知觉现象学。" [ref=e137]
+                - row "Emotion The speaker is feeling calm and composed, with a neutral, detached attitude." [ref=e138]:
+                  - rowheader "Emotion" [ref=e139]
+                  - cell "The speaker is feeling calm and composed, with a neutral, detached attitude." [ref=e140]
+                - row "Scenario Style The speech is delivered in a professional educational podcast or online lecture format." [ref=e141]:
+                  - rowheader "Scenario Style" [ref=e142]
+                  - cell "The speech is delivered in a professional educational podcast or online lecture format." [ref=e143]
+                - row "Caption" [ref=e144]:
+                  - rowheader "Caption" [ref=e145]
+                  - cell [ref=e146]:
+                    - group [ref=e147]:
+                      - generic "Show caption" [ref=e148] [cursor=pointer]
+      - generic [ref=e149]:
+        - 'heading "Normal Source Samples: EN" [level=3] [ref=e150]'
+        - generic [ref=e151]:
+          - article [ref=e152]:
+            - 'heading "Normal EN #1" [level=4] [ref=e153]'
+            - table [ref=e154]:
+              - rowgroup [ref=e155]:
+                - row "Source Audio" [ref=e156]:
+                  - rowheader "Source Audio" [ref=e157]
+                  - cell [ref=e158]
+                - row "Transcription I know a year is a long time, but it's really the only way i'm going to improve my spanish." [ref=e160]:
+                  - rowheader "Transcription" [ref=e161]
+                  - cell "I know a year is a long time, but it's really the only way i'm going to improve my spanish." [ref=e162]
+                - row "Emotion The speaker is feeling a mix of reluctant acceptance and quiet determination, grappling with the weight of a long-term commitment while holding onto resolve." [ref=e163]:
+                  - rowheader "Emotion" [ref=e164]
+                  - cell "The speaker is feeling a mix of reluctant acceptance and quiet determination, grappling with the weight of a long-term commitment while holding onto resolve." [ref=e165]
+                - row "Scenario Style The speech is a personal, introspective monologue recorded in a private setting, likely for self-motivation or language-learning reflection." [ref=e166]:
+                  - rowheader "Scenario Style" [ref=e167]
+                  - cell "The speech is a personal, introspective monologue recorded in a private setting, likely for self-motivation or language-learning reflection." [ref=e168]
+                - row "Caption" [ref=e169]:
+                  - rowheader "Caption" [ref=e170]
+                  - cell [ref=e171]:
+                    - group [ref=e172]:
+                      - generic "Show caption" [ref=e173] [cursor=pointer]
+          - article [ref=e174]:
+            - 'heading "Normal EN #2" [level=4] [ref=e175]'
+            - table [ref=e176]:
+              - rowgroup [ref=e177]:
+                - row "Source Audio" [ref=e178]:
+                  - rowheader "Source Audio" [ref=e179]
+                  - cell [ref=e180]
+                - row "Transcription I had chinese food yesterday, maybe we can try some japanese food, it's healthy." [ref=e182]:
+                  - rowheader "Transcription" [ref=e183]
+                  - cell "I had chinese food yesterday, maybe we can try some japanese food, it's healthy." [ref=e184]
+                - row "Emotion The speaker is feeling warm and casually enthusiastic, sharing a friendly suggestion with a touch of playful encouragement." [ref=e185]:
+                  - rowheader "Emotion" [ref=e186]
+                  - cell "The speaker is feeling warm and casually enthusiastic, sharing a friendly suggestion with a touch of playful encouragement." [ref=e187]
+                - row "Scenario Style The speech is a professionally recorded, natural-sounding voice-over sample for a casual, conversational context, likely used in media or demo reels." [ref=e188]:
+                  - rowheader "Scenario Style" [ref=e189]
+                  - cell "The speech is a professionally recorded, natural-sounding voice-over sample for a casual, conversational context, likely used in media or demo reels." [ref=e190]
+                - row "Caption" [ref=e191]:
+                  - rowheader "Caption" [ref=e192]
+                  - cell [ref=e193]:
+                    - group [ref=e194]:
+                      - generic "Show caption" [ref=e195] [cursor=pointer]
+          - article [ref=e196]:
+            - 'heading "Normal EN #3" [level=4] [ref=e197]'
+            - table [ref=e198]:
+              - rowgroup [ref=e199]:
+                - row "Source Audio" [ref=e200]:
+                  - rowheader "Source Audio" [ref=e201]
+                  - cell [ref=e202]
+                - row "Transcription I wonder why he wants to see us in a hurry. I hope he has some good news for us." [ref=e204]:
+                  - rowheader "Transcription" [ref=e205]
+                  - cell "I wonder why he wants to see us in a hurry. I hope he has some good news for us." [ref=e206]
+                - row "Emotion The speaker is feeling quietly hopeful and gently curious, with a sense of attentive anticipation." [ref=e207]:
+                  - rowheader "Emotion" [ref=e208]
+                  - cell "The speaker is feeling quietly hopeful and gently curious, with a sense of attentive anticipation." [ref=e209]
+                - row "Scenario Style The speech is delivered in a professional, intimate voice-over style, likely for an audiobook or scripted podcast." [ref=e210]:
+                  - rowheader "Scenario Style" [ref=e211]
+                  - cell "The speech is delivered in a professional, intimate voice-over style, likely for an audiobook or scripted podcast." [ref=e212]
+                - row "Caption" [ref=e213]:
+                  - rowheader "Caption" [ref=e214]
+                  - cell [ref=e215]:
+                    - group [ref=e216]:
+                      - generic "Show caption" [ref=e217] [cursor=pointer]
+          - article [ref=e218]:
+            - 'heading "Normal EN #4" [level=4] [ref=e219]'
+            - table [ref=e220]:
+              - rowgroup [ref=e221]:
+                - row "Source Audio" [ref=e222]:
+                  - rowheader "Source Audio" [ref=e223]
+                  - cell [ref=e224]
+                - row "Transcription Not really, in fact, my husband likes it a lot, but it doesn't fit him. It's too small. So i'd like to change it for a larger size. Do you have these in large." [ref=e226]:
+                  - rowheader "Transcription" [ref=e227]
+                  - cell "Not really, in fact, my husband likes it a lot, but it doesn't fit him. It's too small. So i'd like to change it for a larger size. Do you have these in large." [ref=e228]
+                - row "Emotion The speaker is feeling politely determined and gently hopeful, balancing concern with a calm resolve to find a solution." [ref=e229]:
+                  - rowheader "Emotion" [ref=e230]
+                  - cell "The speaker is feeling politely determined and gently hopeful, balancing concern with a calm resolve to find a solution." [ref=e231]
+                - row "Scenario Style The speech is delivered in a professional customer service interaction, typical of a retail transaction in a controlled studio setting." [ref=e232]:
+                  - rowheader "Scenario Style" [ref=e233]
+                  - cell "The speech is delivered in a professional customer service interaction, typical of a retail transaction in a controlled studio setting." [ref=e234]
+                - row "Caption" [ref=e235]:
+                  - rowheader "Caption" [ref=e236]
+                  - cell [ref=e237]:
+                    - group [ref=e238]:
+                      - generic "Show caption" [ref=e239] [cursor=pointer]
+      - generic [ref=e240]:
+        - 'heading "NV Source Samples: ZH" [level=3] [ref=e241]'
+        - generic [ref=e242]:
+          - article [ref=e243]:
+            - 'heading "NV ZH #1" [level=4] [ref=e244]'
+            - table [ref=e245]:
+              - rowgroup [ref=e246]:
+                - row "Source Audio" [ref=e247]:
+                  - rowheader "Source Audio" [ref=e248]
+                  - cell [ref=e249]
+                - row "Transcription 然后我就改变了我的生活态度。" [ref=e251]:
+                  - rowheader "Transcription" [ref=e252]
+                  - cell "然后我就改变了我的生活态度。" [ref=e253]
+                - row "text_with_NV [Breathing]然后我就改变了我的生活态度。" [ref=e254]:
+                  - rowheader "text_with_NV" [ref=e255]
+                  - cell "[Breathing]然后我就改变了我的生活态度。" [ref=e256]
+          - article [ref=e257]:
+            - 'heading "NV ZH #2" [level=4] [ref=e258]'
+            - table [ref=e259]:
+              - rowgroup [ref=e260]:
+                - row "Source Audio" [ref=e261]:
+                  - rowheader "Source Audio" [ref=e262]
+                  - cell [ref=e263]
+                - row "Transcription 我才明白，吐槽人确实是要付出代价的，我要不是吐槽这么明白，他们也找不了这么准。" [ref=e265]:
+                  - rowheader "Transcription" [ref=e266]
+                  - cell "我才明白，吐槽人确实是要付出代价的，我要不是吐槽这么明白，他们也找不了这么准。" [ref=e267]
+                - row "text_with_NV 我才明白，吐槽人确实是要付出代价的，我要[Laughter]不是吐槽这么明白，他们也找不了这么准[Laughter]。" [ref=e268]:
+                  - rowheader "text_with_NV" [ref=e269]
+                  - cell "我才明白，吐槽人确实是要付出代价的，我要[Laughter]不是吐槽这么明白，他们也找不了这么准[Laughter]。" [ref=e270]
+          - article [ref=e271]:
+            - 'heading "NV ZH #3" [level=4] [ref=e272]'
+            - table [ref=e273]:
+              - rowgroup [ref=e274]:
+                - row "Source Audio" [ref=e275]:
+                  - rowheader "Source Audio" [ref=e276]
+                  - cell [ref=e277]
+                - row "Transcription 以后再有机会见到这个人，或者那个人的时候全都能认出来。" [ref=e279]:
+                  - rowheader "Transcription" [ref=e280]
+                  - cell "以后再有机会见到这个人，或者那个人的时候全都能认出来。" [ref=e281]
+                - row "text_with_NV 以后再有机会见到这个人，或者那个人的时[Whispering]候全都能认[Whispering]出来。" [ref=e282]:
+                  - rowheader "text_with_NV" [ref=e283]
+                  - cell "以后再有机会见到这个人，或者那个人的时[Whispering]候全都能认[Whispering]出来。" [ref=e284]
+      - generic [ref=e285]:
+        - 'heading "NV Source Samples: EN" [level=3] [ref=e286]'
+        - generic [ref=e287]:
+          - article [ref=e288]:
+            - 'heading "NV EN #1" [level=4] [ref=e289]'
+            - table [ref=e290]:
+              - rowgroup [ref=e291]:
+                - row "Source Audio" [ref=e292]:
+                  - rowheader "Source Audio" [ref=e293]
+                  - cell [ref=e294]
+                - row "Transcription In the world of theoretical physics, you never finish so much is unprovable. But when i was studying, that railway guide, it was so tangible and so satisfying that something just clicked." [ref=e296]:
+                  - rowheader "Transcription" [ref=e297]
+                  - cell "In the world of theoretical physics, you never finish so much is unprovable. But when i was studying, that railway guide, it was so tangible and so satisfying that something just clicked." [ref=e298]
+                - row "text_with_NV In the world of theoretical physics, you never finish so much is unprovable [Breathing] . But when i was studying, that railway guide, it was so tangible and so satisfying that [Breathing] something just clicked." [ref=e299]:
+                  - rowheader "text_with_NV" [ref=e300]
+                  - cell "In the world of theoretical physics, you never finish so much is unprovable [Breathing] . But when i was studying, that railway guide, it was so tangible and so satisfying that [Breathing] something just clicked." [ref=e301]
+          - article [ref=e302]:
+            - 'heading "NV EN #2" [level=4] [ref=e303]'
+            - table [ref=e304]:
+              - rowgroup [ref=e305]:
+                - row "Source Audio" [ref=e306]:
+                  - rowheader "Source Audio" [ref=e307]
+                  - cell [ref=e308]
+                - row "Transcription Is this more of stuart's creativity? And that wasn't meant as a compliment?" [ref=e310]:
+                  - rowheader "Transcription" [ref=e311]
+                  - cell "Is this more of stuart's creativity? And that wasn't meant as a compliment?" [ref=e312]
+                - row "text_with_NV Is this more of stuart's creativity? And that [Breathing] wasn't meant as a compliment [Laughter] ?" [ref=e313]:
+                  - rowheader "text_with_NV" [ref=e314]
+                  - cell "Is this more of stuart's creativity? And that [Breathing] wasn't meant as a compliment [Laughter] ?" [ref=e315]
+          - article [ref=e316]:
+            - 'heading "NV EN #3" [level=4] [ref=e317]'
+            - table [ref=e318]:
+              - rowgroup [ref=e319]:
+                - row "Source Audio" [ref=e320]:
+                  - rowheader "Source Audio" [ref=e321]
+                  - cell [ref=e322]
+                - row "Transcription So if you don't want to say, i mean work or illness or rifts." [ref=e324]:
+                  - rowheader "Transcription" [ref=e325]
+                  - cell "So if you don't want to say, i mean work or illness or rifts." [ref=e326]
+                - row "text_with_NV [Breathing] So if you don't want to say, i mean [Breathing] work or illness or rifts." [ref=e327]:
+                  - rowheader "text_with_NV" [ref=e328]
+                  - cell "[Breathing] So if you don't want to say, i mean [Breathing] work or illness or rifts." [ref=e329]
+    - generic [ref=e330]:
+      - heading "Baseline Output Comparisons" [level=3] [ref=e331]
+      - paragraph [ref=e332]: System outputs compared against source speech. Scores are on a 1–5 scale (higher is better).
+      - article [ref=e333]:
+        - 'heading "Baseline Comparison: Normal ZH" [level=3] [ref=e334]'
+        - paragraph [ref=e338]: "Source Transcription: 要有坚定的信念，矢志不移，最后也是最重要的就是凡事要讲求公正，有职，有权的人就更得如此。"
+        - table [ref=e340]:
+          - rowgroup [ref=e341]:
+            - row "System Target Audio Translation Emo. Sty." [ref=e342]:
+              - columnheader "System" [ref=e343]
+              - columnheader "Target Audio" [ref=e344]
+              - columnheader "Translation" [ref=e345]
+              - columnheader "Emo." [ref=e346]
+              - columnheader "Sty." [ref=e347]
+          - rowgroup [ref=e348]:
+            - row "Cascaded System One must have firm beliefs and remain steadfast. Finally, and most importantly, one must always pursue justice. Those who hold positions and power must especially do so. 4.0 4.0" [ref=e349]:
+              - cell "Cascaded System" [ref=e350]
+              - cell [ref=e351]
+              - cell "One must have firm beliefs and remain steadfast. Finally, and most importantly, one must always pursue justice. Those who hold positions and power must especially do so." [ref=e353]
+              - cell "4.0" [ref=e354]
+              - cell "4.0" [ref=e355]
+            - row "UniSS One must have firm beliefs and unwavering determination, and the last but most important thing is to uphold justice in all matters. Those who hold positions of power should do even more so. 4.0 3.0" [ref=e356]:
+              - cell "UniSS" [ref=e357]
+              - cell [ref=e358]
+              - cell "One must have firm beliefs and unwavering determination, and the last but most important thing is to uphold justice in all matters. Those who hold positions of power should do even more so." [ref=e360]
+              - cell "4.0" [ref=e361]
+              - cell "3.0" [ref=e362]
+            - row "SeamlessExpressive It is essential to have firm convictions, and finally and above all, it is all the more important that justice be sought for those who have the right to do so. 4.0 5.0" [ref=e363]:
+              - cell "SeamlessExpressive" [ref=e364]
+              - cell [ref=e365]
+              - cell "It is essential to have firm convictions, and finally and above all, it is all the more important that justice be sought for those who have the right to do so." [ref=e367]
+              - cell "4.0" [ref=e368]
+              - cell "5.0" [ref=e369]
+            - row "Seed Live We must have firm faith and never waver. And most importantly, we must be just in everything, especially those in positions of power. 4.0 3.0" [ref=e370]:
+              - cell "Seed Live" [ref=e371]
+              - cell [ref=e372]
+              - cell "We must have firm faith and never waver. And most importantly, we must be just in everything, especially those in positions of power." [ref=e374]
+              - cell "4.0" [ref=e375]
+              - cell "3.0" [ref=e376]
+            - row "Step-Audio 2 Have firm beliefs and never waver. Most importantly, always be fair in all matters, and those in positions of authority must be even more so. 4.0 5.0" [ref=e377]:
+              - cell "Step-Audio 2" [ref=e378]
+              - cell [ref=e379]
+              - cell "Have firm beliefs and never waver. Most importantly, always be fair in all matters, and those in positions of authority must be even more so." [ref=e381]
+              - cell "4.0" [ref=e382]
+              - cell "5.0" [ref=e383]
+      - article [ref=e384]:
+        - 'heading "Baseline Comparison: Normal EN" [level=3] [ref=e385]'
+        - paragraph [ref=e389]: "Source Transcription: I know a year is a long time, but it's really the only way i'm going to improve my spanish."
+        - table [ref=e391]:
+          - rowgroup [ref=e392]:
+            - row "System Target Audio Translation Emo. Sty." [ref=e393]:
+              - columnheader "System" [ref=e394]
+              - columnheader "Target Audio" [ref=e395]
+              - columnheader "Translation" [ref=e396]
+              - columnheader "Emo." [ref=e397]
+              - columnheader "Sty." [ref=e398]
+          - rowgroup [ref=e399]:
+            - row "Cascaded System 我知道一年是很长的时间，但这是唯一能让我提高西班牙语的方法。 2.0 5.0" [ref=e400]:
+              - cell "Cascaded System" [ref=e401]
+              - cell [ref=e402]
+              - cell "我知道一年是很长的时间，但这是唯一能让我提高西班牙语的方法。" [ref=e404]
+              - cell "2.0" [ref=e405]
+              - cell "5.0" [ref=e406]
+            - row "UniSS 我知道一年是一段很长的时间，但这是我提高西班牙语的唯一方法。 3.3 3.0" [ref=e407]:
+              - cell "UniSS" [ref=e408]
+              - cell [ref=e409]
+              - cell "我知道一年是一段很长的时间，但这是我提高西班牙语的唯一方法。" [ref=e411]
+              - cell "3.3" [ref=e412]
+              - cell "3.0" [ref=e413]
+            - row "SeamlessExpressive 我知道一年是很长的时间，但这真的是我能提高西班牙语的唯一方法。 4.0 3.0" [ref=e414]:
+              - cell "SeamlessExpressive" [ref=e415]
+              - cell [ref=e416]
+              - cell "我知道一年是很长的时间，但这真的是我能提高西班牙语的唯一方法。" [ref=e418]
+              - cell "4.0" [ref=e419]
+              - cell "3.0" [ref=e420]
+            - row "Seed Live 我知道一年是很长的时间，但这确实是我提高西班牙语水平的唯一方法。 5.0 5.0" [ref=e421]:
+              - cell "Seed Live" [ref=e422]
+              - cell [ref=e423]
+              - cell "我知道一年是很长的时间，但这确实是我提高西班牙语水平的唯一方法。" [ref=e425]
+              - cell "5.0" [ref=e426]
+              - cell "5.0" [ref=e427]
+            - row "Step-Audio 2 我知道一年时间很长，但这确实是提高我西班牙语水平的唯一方法。 4.0 5.0" [ref=e428]:
+              - cell "Step-Audio 2" [ref=e429]
+              - cell [ref=e430]
+              - cell "我知道一年时间很长，但这确实是提高我西班牙语水平的唯一方法。" [ref=e432]
+              - cell "4.0" [ref=e433]
+              - cell "5.0" [ref=e434]
+      - article [ref=e435]:
+        - 'heading "Baseline Comparison: NV ZH" [level=3] [ref=e436]'
+        - paragraph [ref=e440]: "Source transcription_with_NV: [Breathing]然后我就改变了我的生活态度。"
+        - table [ref=e442]:
+          - rowgroup [ref=e443]:
+            - row "System Target Audio Translation (with NV) NV" [ref=e444]:
+              - columnheader "System" [ref=e445]
+              - columnheader "Target Audio" [ref=e446]
+              - columnheader "Translation (with NV)" [ref=e447]
+              - columnheader "NV" [ref=e448]
+          - rowgroup [ref=e449]:
+            - row "Cascaded System And I changed my attitude towards life. 1.0" [ref=e450]:
+              - cell "Cascaded System" [ref=e451]
+              - cell [ref=e452]
+              - cell "And I changed my attitude towards life." [ref=e454]
+              - cell "1.0" [ref=e455]
+            - row "Seed Live That's when I changed my attitude towards life. 1.0" [ref=e456]:
+              - cell "Seed Live" [ref=e457]
+              - cell [ref=e458]
+              - cell "That's when I changed my attitude towards life." [ref=e460]
+              - cell "1.0" [ref=e461]
+            - row "UniSS 在理论物理的世界里，你永远无法完成。有太多的东西是无法证明的。但当我研究那本铁路指南时，它如此具体且令人满足，以至于某种东西突然产生了共鸣。 1.0" [ref=e462]:
+              - cell "UniSS" [ref=e463]
+              - cell [ref=e464]
+              - cell "在理论物理的世界里，你永远无法完成。有太多的东西是无法证明的。但当我研究那本铁路指南时，它如此具体且令人满足，以至于某种东西突然产生了共鸣。" [ref=e466]
+              - cell "1.0" [ref=e467]
+            - row "Step-Audio 2 在理论物理学的世界里，你永远不会结束。 1.0" [ref=e468]:
+              - cell "Step-Audio 2" [ref=e469]
+              - cell [ref=e470]
+              - cell "在理论物理学的世界里，你永远不会结束。" [ref=e472]
+              - cell "1.0" [ref=e473]
+  - contentinfo [ref=e474]:
+    - paragraph [ref=e476]: Anonymous Submission — Under Review
