@@ -8,6 +8,7 @@ import json
 import os
 import re
 import shutil
+from dataclasses import dataclass
 from pathlib import Path
 
 
@@ -47,11 +48,15 @@ COMPARISON_SAMPLES = [
     ("event", "en", "ytdp_0001_2016_0001_zh_mzc00200azq68gu_k4100g2ce8k_S000057_spk4"),
 ]
 
-BASELINE_LABELS = {
-    "three": "Three-stage",
-    "two": "Two-stage",
-    "seamless": "SeamlessExpressive",
-}
+@dataclass(frozen=True)
+class BaselineSpec:
+    key: str
+    label: str
+    records_dir: Path
+    score_dir: Path
+    wav_search_dir: Path
+    annotation_dir: Path | None = None
+    style_dir: Path | None = None
 
 
 def env_path(name: str) -> Path:
@@ -108,47 +113,105 @@ def copy_audio(source: Path, category: str, name: str) -> str:
     return target.relative_to(ROOT).as_posix()
 
 
-def resolve_baseline_wav(record: dict, baseline_dir: Path) -> Path:
+def resolve_baseline_wav(record: dict, search_dir: Path) -> Path:
     raw = record.get("hyp_wav_path")
     if raw:
         raw_path = Path(raw)
         if raw_path.exists():
             return raw_path
         filename = raw_path.name
-        for found in baseline_dir.rglob(filename):
+        for found in search_dir.rglob(filename):
             if found.is_file():
                 return found
-    raise FileNotFoundError(f"Missing baseline wav for {record.get('id')} under {baseline_dir}")
+    raise FileNotFoundError(f"Missing baseline wav for {record.get('id')} under {search_dir}")
 
 
-def baseline_dir(baselines_root: Path, pool: str, lang: str, baseline: str) -> Path:
+def baseline_specs(
+    benchmark_root: Path,
+    baselines_root: Path,
+    pool: str,
+    lang: str,
+) -> list[BaselineSpec]:
     direction = "zh2en" if lang == "zh" else "en2zh"
-    if baseline == "three":
-        name = f"three_{direction}_a22b"
-    elif baseline == "two":
-        name = f"two_{direction}"
-    elif baseline == "seamless":
-        name = f"seamless_{direction}"
-    else:
-        raise ValueError(baseline)
-    return baselines_root / name / pool
+    checkpoint_root = benchmark_root / "vllm_experiments_20260408_checkpoint227" / lang
+    seed_root = benchmark_root / "qwen3_livetranslate_flash" / lang
+
+    return [
+        BaselineSpec(
+            key="three_vox",
+            label="Three Vox",
+            records_dir=baselines_root / f"three_vox_{direction}" / pool / "full_eval_allmetrics_20260519",
+            score_dir=baselines_root / f"three_vox_{direction}" / pool / "full_eval_allmetrics_20260519",
+            wav_search_dir=baselines_root / f"three_vox_{direction}" / pool,
+        ),
+        BaselineSpec(
+            key="two_vox",
+            label="Two Vox",
+            records_dir=baselines_root / f"two_vox_{direction}" / pool / "full_eval_allmetrics_20260519",
+            score_dir=baselines_root / f"two_vox_{direction}" / pool / "full_eval_allmetrics_20260519",
+            wav_search_dir=baselines_root / f"two_vox_{direction}" / pool,
+        ),
+        BaselineSpec(
+            key="uniss",
+            label="UniSS",
+            records_dir=checkpoint_root / "uniss_quality" / "eval" / pool,
+            score_dir=checkpoint_root / "uniss_quality" / "eval_jsonl_20260515_clean" / pool,
+            wav_search_dir=checkpoint_root / "uniss_quality",
+            annotation_dir=checkpoint_root / "uniss_quality" / "eval" / pool,
+            style_dir=checkpoint_root
+            / "uniss_quality"
+            / "eval_jsonl_20260515_clean"
+            / pool
+            / "style_v4_12_3_run3_20260518",
+        ),
+        BaselineSpec(
+            key="seamless",
+            label="SeamlessExpressive",
+            records_dir=baselines_root / f"seamless_{direction}" / pool / "full_eval_allmetrics",
+            score_dir=baselines_root / f"seamless_{direction}" / pool / "full_eval_clean_20260515",
+            wav_search_dir=baselines_root / f"seamless_{direction}" / pool,
+            annotation_dir=baselines_root / f"seamless_{direction}" / pool / "full_eval_clean_20260515",
+            style_dir=baselines_root
+            / f"seamless_{direction}"
+            / pool
+            / "style_v4_12_3_run3_20260518",
+        ),
+        BaselineSpec(
+            key="seed_live",
+            label="Seed Live",
+            records_dir=seed_root / "asr_basic_event_rescore_20260516" / pool,
+            score_dir=seed_root / "eval_clean_20260515" / pool,
+            wav_search_dir=seed_root,
+            annotation_dir=seed_root / "eval" / pool,
+            style_dir=seed_root / "eval_clean_20260515" / pool / "style_v4_12_3_run3_20260518",
+        ),
+        BaselineSpec(
+            key="step_audio",
+            label="Step-Audio 2",
+            records_dir=checkpoint_root / "orig_normal" / "eval" / pool,
+            score_dir=checkpoint_root / "orig_normal" / "eval_jsonl_20260515_clean" / pool,
+            wav_search_dir=checkpoint_root / "orig_normal",
+            annotation_dir=checkpoint_root / "orig_normal" / "eval" / pool,
+            style_dir=checkpoint_root
+            / "orig_normal"
+            / "eval_jsonl_20260515_clean"
+            / pool
+            / "style_v4_12_3_run3_20260518",
+        ),
+    ]
 
 
-def load_baseline_bundle(base_dir: Path, pool: str) -> dict:
-    allmetrics = base_dir / "full_eval_allmetrics"
-    records = load_jsonl_by_id(allmetrics / "eval_records_merged.jsonl")
-    clean = base_dir / "full_eval_clean_20260515"
+def load_baseline_bundle(spec: BaselineSpec, pool: str) -> dict:
+    records = load_jsonl_by_id(spec.records_dir / "eval_records_merged.jsonl")
     annotation_records = records
-    if clean.exists() and (clean / "eval_records_merged.jsonl").exists():
-        annotation_records = load_jsonl_by_id(clean / "eval_records_merged.jsonl")
-    score_dir = clean if clean.exists() else allmetrics
-    scores = load_jsonl_by_id(first_jsonl(score_dir, "eval_results*.jsonl"))
+    if spec.annotation_dir and (spec.annotation_dir / "eval_records_merged.jsonl").exists():
+        annotation_records = load_jsonl_by_id(spec.annotation_dir / "eval_records_merged.jsonl")
+    scores = load_jsonl_by_id(first_jsonl(spec.score_dir, "eval_results*.jsonl"))
     style_scores: dict[str, dict] = {}
-    if pool == "normal":
-        style_dir = base_dir / "style_v4_12_3_run3_20260518"
-        if style_dir.exists():
-            style_scores = load_jsonl_by_id(first_jsonl(style_dir, "eval_results*.jsonl"))
+    if pool == "normal" and spec.style_dir and spec.style_dir.exists():
+        style_scores = load_jsonl_by_id(first_jsonl(spec.style_dir, "eval_results*.jsonl"))
     return {
+        "spec": spec,
         "records": records,
         "annotation_records": annotation_records,
         "scores": scores,
@@ -233,10 +296,9 @@ def speech_text(record: dict, pool: str) -> str:
 
 def render_normal_comparison(
     benchmark_root: Path,
-    baselines_root: Path,
     lang: str,
     row: dict,
-    bundles: dict[str, dict],
+    bundles: list[dict],
 ) -> str:
     src_wav = copy_audio(
         source_audio_path(benchmark_root, lang, row),
@@ -244,20 +306,21 @@ def render_normal_comparison(
         f"source_{row['id']}.wav",
     )
     rows_html = []
-    for key, label in BASELINE_LABELS.items():
-        record = bundles[key]["records"][row["id"]]
-        annotation_record = bundles[key]["annotation_records"].get(row["id"], record)
-        score = bundles[key]["scores"].get(row["id"], {})
-        style_score = bundles[key]["style_scores"].get(row["id"], {})
+    for bundle in bundles:
+        spec = bundle["spec"]
+        record = bundle["records"][row["id"]]
+        annotation_record = bundle["annotation_records"].get(row["id"], record)
+        score = bundle["scores"].get(row["id"], {})
+        style_score = bundle["style_scores"].get(row["id"], {})
         wav = copy_audio(
-            resolve_baseline_wav(record, baseline_dir(baselines_root, "normal", lang, key)),
+            resolve_baseline_wav(record, spec.wav_search_dir),
             f"comparison/normal/{lang}",
-            f"{key}_{row['id']}.wav",
+            f"{spec.key}_{row['id']}.wav",
         )
         rows_html.append(
             f"""
                             <tr>
-                                <td>{e(label)}</td>
+                                <td>{e(spec.label)}</td>
                                 <td>{audio_tag(wav)}</td>
                                 <td class="transcript">{e(speech_text(record, "normal"))}</td>
                                 <td>{e(annotation_record.get("hyp_emotion") or annotation_record.get("hyp_emotion_text"))}</td>
@@ -302,10 +365,9 @@ def render_normal_comparison(
 
 def render_event_comparison(
     benchmark_root: Path,
-    baselines_root: Path,
     lang: str,
     row: dict,
-    bundles: dict[str, dict],
+    bundles: list[dict],
 ) -> str:
     src_wav = copy_audio(
         source_audio_path(benchmark_root, lang, row),
@@ -313,18 +375,19 @@ def render_event_comparison(
         f"source_{row['id']}.wav",
     )
     rows_html = []
-    for key, label in BASELINE_LABELS.items():
-        record = bundles[key]["records"][row["id"]]
-        score = bundles[key]["scores"].get(row["id"], {})
+    for bundle in bundles:
+        spec = bundle["spec"]
+        record = bundle["records"][row["id"]]
+        score = bundle["scores"].get(row["id"], {})
         wav = copy_audio(
-            resolve_baseline_wav(record, baseline_dir(baselines_root, "event", lang, key)),
+            resolve_baseline_wav(record, spec.wav_search_dir),
             f"comparison/nv/{lang}",
-            f"{key}_{row['id']}.wav",
+            f"{spec.key}_{row['id']}.wav",
         )
         rows_html.append(
             f"""
                             <tr>
-                                <td>{e(label)}</td>
+                                <td>{e(spec.label)}</td>
                                 <td>{audio_tag(wav)}</td>
                                 <td class="transcript">{e(speech_text(record, "event"))}</td>
                                 <td>{e(score.get("event_score"))}</td>
@@ -362,14 +425,14 @@ def render_comparison_section(benchmark_root: Path, baselines_root: Path) -> str
     for pool, lang, sample_id in COMPARISON_SAMPLES:
         file_name = "normal_clean.jsonl" if pool == "normal" else "event_clean.jsonl"
         row = load_jsonl_by_id(benchmark_root / lang / file_name)[sample_id]
-        bundles = {
-            key: load_baseline_bundle(baseline_dir(baselines_root, pool, lang, key), pool)
-            for key in BASELINE_LABELS
-        }
+        bundles = [
+            load_baseline_bundle(spec, pool)
+            for spec in baseline_specs(benchmark_root, baselines_root, pool, lang)
+        ]
         if pool == "normal":
-            pieces.append(render_normal_comparison(benchmark_root, baselines_root, lang, row, bundles))
+            pieces.append(render_normal_comparison(benchmark_root, lang, row, bundles))
         else:
-            pieces.append(render_event_comparison(benchmark_root, baselines_root, lang, row, bundles))
+            pieces.append(render_event_comparison(benchmark_root, lang, row, bundles))
     return "\n".join(pieces)
 
 
@@ -389,6 +452,8 @@ def replace_audio_section(section_html: str) -> None:
 def main() -> None:
     benchmark_root = env_path("STEB_BENCHMARK_ROOT")
     baselines_root = env_path("STEB_BASELINES_ROOT")
+    if STATIC_AUDIO.exists():
+        shutil.rmtree(STATIC_AUDIO)
     section = f"""
             <div class="demo-block">
                 <h3>Benchmark Source Audio</h3>
