@@ -21,12 +21,12 @@ SOURCE_SAMPLES = {
         "ytdp_0008_10314862_S00020",
         "ytdp_0008_11046006_S00054",
         "ytdp_0008_135337875_S00011",
-        "ytdp_0008_142682235_S00079",
+        "ytdp_0008_178130903_S00057",
     ],
     ("normal", "en"): [
         "ytdp_0008_10251880_S00020",
-        "ytdp_0008_101932118_S00007",
-        "ytdp_0008_10251315_S00009",
+        "ytdp_0008_10254889_S00045",
+        "ytdp_0008_10254891_S00041",
         "ytdp_0008_10254886_S00064",
     ],
     ("event", "zh"): [
@@ -36,7 +36,7 @@ SOURCE_SAMPLES = {
     ],
     ("event", "en"): [
         "ytdp_0001_2016_0001_zh_mzc00200azq68gu_k4100g2ce8k_S000057_spk4",
-        "ytdp_0001_2010_0001_zh_mzc00200d5364mn_w41001bzzyd_S000022_spk2",
+        "ytdp_0008_776322259_001_S00011",
         "ytdp_0001_2018_0001_zh_d5w79ke56k4n2ba_z0029s2azuh_S000142_spk0",
     ],
 }
@@ -134,19 +134,12 @@ def baseline_specs(
 ) -> list[BaselineSpec]:
     direction = "zh2en" if lang == "zh" else "en2zh"
     checkpoint_root = benchmark_root / "vllm_experiments_20260408_checkpoint227" / lang
-    seed_root = benchmark_root / "qwen3_livetranslate_flash" / lang
+    seed_root = benchmark_root / "doubao-ast" / lang
 
     return [
         BaselineSpec(
-            key="three_vox",
-            label="Three Vox",
-            records_dir=baselines_root / f"three_vox_{direction}" / pool / "full_eval_allmetrics_20260519",
-            score_dir=baselines_root / f"three_vox_{direction}" / pool / "full_eval_allmetrics_20260519",
-            wav_search_dir=baselines_root / f"three_vox_{direction}" / pool,
-        ),
-        BaselineSpec(
             key="two_vox",
-            label="Two Vox",
+            label="Cascaded System",
             records_dir=baselines_root / f"two_vox_{direction}" / pool / "full_eval_allmetrics_20260519",
             score_dir=baselines_root / f"two_vox_{direction}" / pool / "full_eval_allmetrics_20260519",
             wav_search_dir=baselines_root / f"two_vox_{direction}" / pool,
@@ -179,11 +172,9 @@ def baseline_specs(
         BaselineSpec(
             key="seed_live",
             label="Seed Live",
-            records_dir=seed_root / "asr_basic_event_rescore_20260516" / pool,
-            score_dir=seed_root / "eval_clean_20260515" / pool,
+            records_dir=seed_root / "full_eval_allmetrics_20260519" / pool,
+            score_dir=seed_root / "full_eval_allmetrics_20260519" / pool,
             wav_search_dir=seed_root,
-            annotation_dir=seed_root / "eval" / pool,
-            style_dir=seed_root / "eval_clean_20260515" / pool / "style_v4_12_3_run3_20260518",
         ),
         BaselineSpec(
             key="step_audio",

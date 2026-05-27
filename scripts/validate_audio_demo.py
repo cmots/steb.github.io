@@ -51,15 +51,29 @@ def main() -> None:
         if required not in html:
             fail(f"missing required label: {required}")
 
-    if html.count("<details") < 40:
+    for forbidden_label in ["Three Vox", "Two Vox"]:
+        if forbidden_label in html:
+            fail(f"comparison should not expose deprecated label: {forbidden_label}")
+
+    for required_label in [
+        "Cascaded System",
+        "UniSS",
+        "SeamlessExpressive",
+        "Seed Live",
+        "Step-Audio 2",
+    ]:
+        if required_label not in html:
+            fail(f"missing comparison label: {required_label}")
+
+    if html.count("<details") < 38:
         fail("expected long captions/reasons to be folded with details")
 
     if "<td></td>" in html or "<p></p>" in html:
         fail("found empty demo cell or folded reason")
 
     audio_srcs = re.findall(r'<source src="([^"]+)" type="audio/wav">', html)
-    if len(audio_srcs) != 42:
-        fail("expected exactly 42 audio source tags")
+    if len(audio_srcs) != 38:
+        fail("expected exactly 38 audio source tags")
 
     for src in audio_srcs:
         if src.startswith("/") or src.startswith("http"):
