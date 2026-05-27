@@ -254,6 +254,76 @@ h3 {
     font-size: 0.95rem;
 }
 
+.demo-block {
+    margin-top: 2.5rem;
+}
+
+.demo-block > h3 {
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.demo-subsection {
+    margin-top: 2rem;
+}
+
+.demo-subsection > h3 {
+    padding-bottom: 0.45rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.source-demo-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+}
+
+.source-demo-card,
+.comparison-demo-card {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.source-demo-card h4,
+.comparison-demo-card h3 {
+    margin-bottom: 0.75rem;
+}
+
+.source-table th {
+    width: 145px;
+}
+
+.source-context {
+    margin-bottom: 1rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: var(--color-bg-alt);
+}
+
+.source-context p {
+    margin-top: 0.55rem;
+    font-size: 0.86rem;
+    color: var(--color-text-secondary);
+    line-height: 1.55;
+}
+
+.demo-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.comparison-table {
+    min-width: 760px;
+}
+
+.normal-comparison-table {
+    min-width: 1180px;
+}
+
 .demo-group {
     margin-bottom: 2.5rem;
 }
@@ -309,6 +379,23 @@ h3 {
     max-width: 300px;
 }
 
+.demo-details summary {
+    cursor: pointer;
+    color: var(--color-accent);
+    font-weight: 500;
+}
+
+.demo-details p {
+    margin-top: 0.5rem;
+    font-size: 0.82rem;
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+}
+
+.reason-details {
+    min-width: 140px;
+}
+
 /* ===== Footer ===== */
 .footer {
     padding: 2.5rem 0;
@@ -334,5 +421,25 @@ h3 {
 
     .demo-table audio {
         width: 160px;
+    }
+
+    .source-demo-card,
+    .comparison-demo-card {
+        padding: 0.85rem;
+    }
+
+    .source-table th,
+    .source-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .source-table th {
+        border-bottom: 0;
+        padding-bottom: 0.2rem;
+    }
+
+    .source-table td {
+        padding-top: 0.2rem;
     }
 }
