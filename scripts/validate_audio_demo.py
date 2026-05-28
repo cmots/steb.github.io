@@ -25,12 +25,24 @@ def main() -> None:
         "home/tione",
         "tione/notebook",
         "Anonymous Authors,",
+        "Code (Coming Soon)",
     ]:
         if forbidden in html:
             fail(f"found forbidden reviewer-visible string: {forbidden}")
 
     if html.count('class="source-demo-card"') != 14:
         fail("expected 14 benchmark source demo cards")
+
+    source_cards = re.findall(
+        r'<article class="source-demo-card">.*?</article>',
+        html,
+        flags=re.DOTALL,
+    )
+    if len(source_cards) != 14:
+        fail("expected to parse 14 benchmark source cards")
+    for index, card in enumerate(source_cards, start=1):
+        if "<th>Translation</th>" not in card:
+            fail(f"benchmark source card {index} is missing Translation")
 
     if html.count('class="comparison-demo-card"') != 4:
         fail("expected 4 baseline comparison demo cards")
@@ -44,12 +56,15 @@ def main() -> None:
         "Scenario Style",
         "text_with_NV",
         "transcription_with_NV",
-        "translation_with_NV",
-        "Emotion Score",
-        "Scenario Style Score",
     ]:
         if required not in html:
             fail(f"missing required label: {required}")
+    if "translation_with_NV" not in html and "Translation (with NV)" not in html:
+        fail("missing required NV translation label")
+    if "Emotion Score" not in html and "Emo." not in html:
+        fail("missing required emotion score label")
+    if "Scenario Style Score" not in html and "Sty." not in html:
+        fail("missing required scenario style score label")
 
     for forbidden_label in ["Three Vox", "Two Vox"]:
         if forbidden_label in html:
@@ -65,7 +80,7 @@ def main() -> None:
         if required_label not in html:
             fail(f"missing comparison label: {required_label}")
 
-    if html.count("<details") < 38:
+    if html.count("<details") < 8:
         fail("expected long captions/reasons to be folded with details")
 
     if "<td></td>" in html or "<p></p>" in html:

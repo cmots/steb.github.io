@@ -214,6 +214,14 @@ def source_audio_path(benchmark_root: Path, lang: str, row: dict) -> Path:
     return benchmark_root / lang / row["wav_path"]
 
 
+def source_translation(row: dict, lang: str) -> str:
+    translation = row.get("translation")
+    if isinstance(translation, dict):
+        target_lang = "en" if lang == "zh" else "zh"
+        return translation.get(target_lang) or ""
+    return translation or ""
+
+
 def render_source_card(benchmark_root: Path, pool: str, lang: str, row: dict, index: int) -> str:
     asset_pool = "nv" if pool == "event" else pool
     wav = copy_audio(
@@ -231,6 +239,7 @@ def render_source_card(benchmark_root: Path, pool: str, lang: str, row: dict, in
                         <tbody>
                             <tr><th>Source Audio</th><td>{audio_tag(wav)}</td></tr>
                             <tr><th>Transcription</th><td class="transcript">{e(row.get("text"))}</td></tr>
+                            <tr><th>Translation</th><td class="transcript">{e(source_translation(row, lang))}</td></tr>
                             <tr><th>Emotion</th><td>{e(row.get("emotion"))}</td></tr>
                             <tr><th>Scenario Style</th><td>{e(row.get("style"))}</td></tr>
                             <tr><th>Caption</th><td>{details("Show caption", row.get("caption"))}</td></tr>
@@ -245,6 +254,7 @@ def render_source_card(benchmark_root: Path, pool: str, lang: str, row: dict, in
                         <tbody>
                             <tr><th>Source Audio</th><td>{audio_tag(wav)}</td></tr>
                             <tr><th>Transcription</th><td class="transcript">{e(row.get("text"))}</td></tr>
+                            <tr><th>Translation</th><td class="transcript">{e(source_translation(row, lang))}</td></tr>
                             <tr><th>text_with_NV</th><td class="transcript">{e(row.get("text_with_events"))}</td></tr>
                         </tbody>
                     </table>
