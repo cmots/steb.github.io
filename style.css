@@ -157,6 +157,7 @@ h4 {
 .badge {
     display: inline-flex;
     align-items: center;
+    gap: 0.4rem;
     padding: 0.5rem 1.1rem;
     border-radius: 100px;
     font-size: 0.8rem;
@@ -167,6 +168,18 @@ h4 {
     border: 1px solid var(--color-border);
     transition: all 0.2s ease;
     letter-spacing: 0.01em;
+}
+
+.badge-icon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+.badge-emoji {
+    font-size: 0.95rem;
+    line-height: 1;
+    flex-shrink: 0;
 }
 
 .badge:hover {
