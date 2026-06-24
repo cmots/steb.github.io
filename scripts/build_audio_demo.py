@@ -32,11 +32,11 @@ SOURCE_SAMPLES = {
     ("event", "zh"): [
         "ytdp_0001_2010_0001_zh_fj9rajyzwzjohi5_e0021wnwimt_S000300_spk1",
         "ytdp_0008_761264393_001_S00013",
-        "ytdp_0001_2019_0001_zh_lc2a6fi2osbbedd_c00311v42wj_S000193_spk8",
+        "ytdp_0001_2018_0001_zh_mzc0020020tlz7s_m0045qjjsk5_S000219_spk0",
     ],
     ("event", "en"): [
         "ytdp_0001_2016_0001_zh_mzc00200azq68gu_k4100g2ce8k_S000057_spk4",
-        "ytdp_0008_776322259_001_S00011",
+        "ytdp_0001_2015_0001_zh_fcq46oukym4tmso_s0019k5t9s5_S000045_spk0",
         "ytdp_0001_2018_0001_zh_d5w79ke56k4n2ba_z0029s2azuh_S000142_spk0",
     ],
 }
